@@ -6,21 +6,19 @@
 using namespace std;
 
 bool operator< (const Date &lhs, const Date &rhs) {
-    if (lhs.year > rhs.year)
-        return false;
-  return lhs.month < rhs.month || lhs.month == rhs.month && lhs.day < rhs.day;
+  return tie(lhs.year, lhs.month, lhs.day) < tie(rhs.year, rhs.month, rhs.day);
 }
 
 bool operator== (const Date &lhs, const Date &rhs) {
-  return lhs.year == rhs.year && lhs.month == rhs.month && lhs.day == rhs.day;
+  return tie(lhs.year, lhs.month, lhs.day) == tie(rhs.year, rhs.month, rhs.day);
 }
 
 bool operator< (const Time &lhs, const Time &rhs) {
-  return lhs.hours <= rhs.hours && lhs.minutes < rhs.minutes;
+  return tie(lhs.hours, lhs.minutes) < tie(rhs.hours, rhs.minutes);
 }
 
 bool operator== (const Time &lhs, const Time &rhs) {
-  return lhs.hours == rhs.hours && lhs.minutes == rhs.minutes;
+  return tie(lhs.hours, lhs.minutes) == tie(rhs.hours, rhs.minutes);
 }
 
 ostream& operator<< (ostream& out, const Date& date) {
