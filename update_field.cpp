@@ -7,48 +7,42 @@ bool operator== (const Date &lhs, const Date &rhs) {
   return tie(lhs.year, lhs.month, lhs.day) == tie(rhs.year, rhs.month, rhs.day);
 }
 
-std::ostream& operator<< (ostream& out, const Date &dt) {
+ostream& operator<< (ostream& out, const Date &dt) {
   out << dt.year << '-' << dt.month << '-' << dt.day;
   return out;
+}
+
+istream& operator>> (istream& is, Date& toRecord) {
+  is >> toRecord.year;
+  is.ignore(1);
+  is >> toRecord.month;
+  is.ignore(1);
+  is >> toRecord.day;
+  return is;
 }
 
 bool operator== (const Time &lhs, const Time &rhs) {
   return tie(lhs.hours, lhs.minutes) == tie(lhs.hours, lhs.minutes);
 }
 
-std::ostream& operator<< (ostream &out, const Time &tm) {
+ostream& operator<< (ostream &out, const Time &tm) {
   out << tm.hours << ':' << tm.minutes;
   return out;
 }
 
-#define UPDATE_FIELD(ticket, field, values) {\
+istream& operator>> (istream& is, Time& toRecord) {
+  is >> toRecord.hours;
+  is.ignore(1);
+  is >> toRecord.minutes;
+  return is;
+}
+
+#define UPDATE_FIELD(ticket, field, values) {                         \
     map<string,string>::const_iterator it = values.find(#field);      \
-    if (it != values.end())        \
-        ChangeValue(ticket.field, it->second);  \
-}
-
-void ChangeValue(Date& toChange, const string& str) {
-  std::istringstream stream(str);
-  string token;
-  getline(stream, token, '-') >> toChange.month;
-  toChange.year = stoi(token);
-  getline(stream, token, '-') >> toChange.day;
-}
-
-void ChangeValue(Time& toChange, const string& str) {
-  std::istringstream stream(str);
-  string token;
-  getline(stream, token, ':') >> toChange.minutes;
-  toChange.hours = stoi(token);
-}
-
-void ChangeValue(string& toChange, const string& str) {
-  toChange = str;
-}
-
-void ChangeValue(int& toChange, const string& str){
-  istringstream stream(str);
-  stream >> toChange;
+    if (it != values.end())  {                                        \
+      istringstream is(it->second);                                   \
+      is >> ticket.field;                                             \
+    }                                                                 \
 }
 
 void TestUpdate() {

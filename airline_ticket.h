@@ -5,11 +5,7 @@ using namespace std;
 
 struct Date {
   int year, month, day;
-
-  // Date(int x, int y, int z) { year = x, month = y, day = z; }
-  // Date(int x){}
 };
-
 
 struct Time {
   int hours, minutes;
