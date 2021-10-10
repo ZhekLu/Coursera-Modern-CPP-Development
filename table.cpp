@@ -38,7 +38,8 @@ public:
         for(int i = 0; i < newRows; i++)
             for(int j = 0; j < newCols; j++)
                 newBase[i][j] = *tempDefVal;
-
+        delete[] tempDefVal;
+        
         for(int i = 0; i < newRows && i < rows; i++) {
             for(int j = 0; j < newCols && j < cols; j++) {
                 newBase[i][j] = base[i][j];
