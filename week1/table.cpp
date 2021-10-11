@@ -5,17 +5,9 @@ template<typename T>
 class Table {
 public:
    Table(size_t rows, size_t cols) {
-       if (!rows || !cols) {
-           this->rows = this->cols = 0;
-       }
-       else {
-           base.resize(rows);
-           for (int i = 0; i < rows; i++) {
-              base[i].resize(cols);
-           this->rows = rows;
-           this->cols = cols;
-       }
-       }
+        if (!rows || !cols) 
+            rows = cols = 0;
+        Resize(rows, cols);
    }
 
 
@@ -24,16 +16,10 @@ public:
    }
 
    void Resize(size_t newRows, size_t newCols) {
-       vector<vector<T>> newBase(newRows);
-       for (int i = 0; i < newRows; i++) {
-           newBase[i].resize(newCols);
-       }
-       
-       for (int i = 0; i < newRows && i < rows; i++)
-           for(int j = 0; j < newCols && j < cols; j++)
-               newBase[i][j] = base[i][j];
-       
-       base = newBase;
+       base.resize(newRows);
+       for (int i = 0; i < newRows; i++) 
+            base[i].resize(newCols);
+
        rows = newRows;
        cols = newCols;
    }
