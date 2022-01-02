@@ -6,43 +6,47 @@
 #include <string>
 using namespace std;
 
-template <typename C>
-auto Paginate(C& c, size_t page_size);
-
 template <typename Iterator>
 class IteratorRange {
+private:
+  Iterator first;
+  Iterator last;
+  size_t _size;
 public:
-  Iterator first, last;
-
-  IteratorRange(Iterator f, Iterator l) : first(f), last(l) {}
+  IteratorRange(Iterator f, Iterator l) : first(f), last(l), _size(last - first) {
+  }
 
   Iterator begin() const {
     return first;
   }
+
   Iterator end() const {
     return last;
   }
+
   size_t size() const {
-    return last - first;
+    return _size;
   }
 };
 
 template <typename Iterator>
 class Paginator {
 private:
-  Iterator first;
-  Iterator last;
-  size_t page_size;
+  vector<IteratorRange<Iterator>> pages;
+  void Paginate(Iterator begin, Iterator end, size_t page_size) {
+    for(size_t els = end - begin; els > 0; ) {
+      size_t currSize = min(els, page_size);
+      Iterator currEnd = next(begin, currSize);
+      pages.push_back({begin, currEnd});
 
-public:
-  Paginator(Iterator begin, Iterator end, size_t p_size, int fix) : first(begin), last(end), page_size(p_size)
-  {
+      begin = currEnd;
+      els -= currSize;
+    }
   }
 
-  Paginator(Iterator begin, Iterator end, size_t p_size) : first(begin), last(end), page_size(p_size)
-  {
-    auto C = IteratorRange(begin, end);
-    this->pages = Paginate(C, p_size).pages;
+public:
+  Paginator(Iterator begin, Iterator end, size_t page_size) {
+    this->Paginate(begin, end, page_size);
   }
 
   // methods
@@ -57,22 +61,11 @@ public:
   size_t size() const {
     return pages.size();
   }
-
-  vector<IteratorRange<Iterator>> pages;
 };
 
 template <typename C>
 auto Paginate(C& c, size_t page_size) {
-  Paginator res(c.begin(), c.end(), page_size, 1);
-  auto iter_begin = c.begin();
-  for(int i = 0, j = 0; i < c.size();) {
-    for(j = 0; j < page_size && i < c.size(); j++, i++)
-    {
-    }
-    res.pages.push_back(IteratorRange{iter_begin, next(iter_begin, j)});
-    iter_begin = next(iter_begin, j);
-  }
-  return res;
+  return Paginator(c.begin(), c.end(), page_size);
 }
 
 void TestPageCounts() {
