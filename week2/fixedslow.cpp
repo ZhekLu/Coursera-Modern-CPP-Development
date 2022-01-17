@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <utility>
-#include <map>
+#include <unordered_map>
 #include <set>
 
 using namespace std;
@@ -34,7 +34,7 @@ public:
   }
 
 private:
-  map<int, int> userid_pages;
+  unordered_map<int, int> userid_pages;
   set<pair<int, int>> pages_userid;
 
   int GetUserCount() const {
