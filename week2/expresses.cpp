@@ -21,14 +21,13 @@ public:
     }
     const set<int>& reachable_stations = reachable_lists_.at(start);
     if (!reachable_stations.empty()) {
-      const auto& near_finish_nl = reachable_stations.lower_bound(finish);
-      const auto near_finish_l = next(near_finish_nl, -1);
-      if (near_finish_nl != reachable_stations.end()){
-        result = min(result, abs(finish - *(near_finish_nl)));
+      const auto near_finish = reachable_stations.lower_bound(finish);
+      if (near_finish != reachable_stations.end()){
+        result = min(result, abs(finish - *(near_finish)));
         // cerr << " res now: " << result << endl;
       }
-      if (near_finish_l != reachable_stations.end()){
-        result = min(result, abs(finish - *(near_finish_l)));
+      if (near_finish != reachable_stations.begin()){
+        result = min(result, abs(finish - *prev(near_finish)));
         // cerr << " res now: " << result << "near: " << *near_finish_l << endl;
       }
     }
